@@ -13,4 +13,9 @@ router
   .put(booksController.update)
   .delete(booksController.remove);
 
+router
+  .route("Title/:id")
+  .get(booksController.findByTitle)
+
+
 module.exports = router;

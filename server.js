@@ -1,12 +1,14 @@
 const express = require("express");
 const path = require("path");
-
+const morgan = require('morgan');
 
 const mongoose = require("mongoose");
 const routes = require("./routes");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+app.use(morgan('combined'))
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
