@@ -173,21 +173,38 @@ fetchBooks = async () => {
           <Row>
           <Col size="md-12 sm-12">
 
-            {this.state.books.items ? (
+            {this.state.books.items  ? (
 
                 <ul>
                     {
                       this.state.books.items.map((book, index) => {
                         return (
-                          <li key={index}>
-                            <div>
-                              <img alt={`${book.volumeInfo.title} book`} src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} />
+                          <li key={index} class="list-group-item">
+                            {/* <div>
                               <div>
-                                <h3>{book.volumeInfo.title}</h3>
-                                <p>{book.volumeInfo.publishedDate}</p>
+
                               </div>
+                            </div> */}
+                            <div class="row">
+                                <div class="col-2">
+                              <a href={book.volumeInfo.infoLink}><img alt={`${book.volumeInfo.title} book`} src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} /></a>
+
+                                </div>
+
+                                <div class="col-3">
+                              <h3>{book.volumeInfo.title}</h3>
+                              <p>by: {book.volumeInfo.authors}</p>
+                              <p>{book.volumeInfo.publishedDate}</p>
+
+                                </div>
+                                <div class="col">
+                                <p>{book.volumeInfo.description}</p>
+                                <SaveBtn key="book.id" book={book} savebook={this.saveBook} />
+                                </div>
+
                             </div>
-                            <hr />
+
+
                           </li>
                         );
                       })
