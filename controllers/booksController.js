@@ -1,7 +1,9 @@
 // import axios from "axios";
+const axios = require('axios');
 const db = require("../models");
 
 const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
+const query = "bourne"
 
 // https://www.googleapis.com/books/v1/volumes?q=
 // Defining methods for the booksController
@@ -15,6 +17,7 @@ module.exports = {
   },
   // search: function(query) {
   //   return axios.get(BASEURL + query);
+  //   console.log("test" + query)
   // },
   findById: function(req, res) {
     db.Book
