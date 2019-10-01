@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 const db = require("../models");
 
 const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
@@ -13,9 +13,9 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  search: function(query) {
-    return axios.get(BASEURL + query);
-  },
+  // search: function(query) {
+  //   return axios.get(BASEURL + query);
+  // },
   findById: function(req, res) {
     db.Book
       .findById(req.params.id)

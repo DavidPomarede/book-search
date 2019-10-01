@@ -16,7 +16,31 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x");
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x");
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/googlebooks";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x";
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {  
+console.log('Mongoose default connection error: ' + err);
+}); 
+
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function () {  
+console.log('Mongoose default connection disconnected'); 
+});
+
+// If the Node process ends, close the Mongoose connection 
+process.on('SIGINT', function() {  
+mongoose.connection.close(function () { 
+    console.log('Mongoose default connection disconnected through app termination'); 
+    process.exit(0); 
+}); 
+}); 
+
+
 
 // Start the API server
 app.listen(PORT, function() {
