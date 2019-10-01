@@ -164,13 +164,13 @@ fetchBooks = async () => {
               <p>Search for and Save Books of Interest</p>
             </Jumbotron>
             <form>
-            Search Books
+
               <Input
                 value={this.state.search}
                 // value={searchTerm}
                 onChange={this.handleInputChange}
                 name="search"
-                placeholder="Title (required)"
+                placeholder="Search for an author, title, or topic"
               /> 
               <FormBtn
                 disabled={!this.state.search}

@@ -21,8 +21,8 @@ app.use(routes);
 
 // Connect to the Mongo DB
 // mongoose.connect(process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x");
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/googlebooks";
-// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x";
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/googlebooks";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://user1:password1@ds229118.mlab.com:29118/heroku_2km8737x";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
