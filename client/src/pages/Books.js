@@ -25,10 +25,10 @@ class Books extends Component {
     error: ""
   };
 
-  componentDidMount() {
-    // this.loadBooks();
-    console.log('Fuck off'+ this.state.books)
-  }
+  // componentDidMount() {
+  //   // this.loadBooks();
+
+  // }
 
   loadBooks = () => {
     API.getBooks()
