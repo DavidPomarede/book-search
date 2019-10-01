@@ -1,5 +1,9 @@
+import axios from "axios";
 const db = require("../models");
 
+const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
+
+// https://www.googleapis.com/books/v1/volumes?q=
 // Defining methods for the booksController
 module.exports = {
   findAll: function(req, res) {
@@ -9,15 +13,12 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  search: function(query) {
+    return axios.get(BASEURL + query);
+  },
   findById: function(req, res) {
     db.Book
       .findById(req.params.id)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  findByTitle: function(req, res) {
-    db.Book
-      .find(req.params.title)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

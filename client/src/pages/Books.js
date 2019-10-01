@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import DeleteBtn from "../components/DeleteBtn";
-import SaveBtn from "../components/SaveBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
@@ -13,9 +12,7 @@ class Books extends Component {
     books: [],
     title: "",
     author: "",
-    synopsis: "",
-    search: "",
-    book: ""
+    synopsis: ""
   };
 
   componentDidMount() {
@@ -36,12 +33,6 @@ class Books extends Component {
       .catch(err => console.log(err));
   };
 
-  saveBook = id => {
-    const book = { ...this.state }
-    this.props.saveBook(book)
-    console.log(book);
-  }
-
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -51,9 +42,11 @@ class Books extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.title) {
-      API.find({
-        title: this.state.title
+    if (this.state.title && this.state.author) {
+      API.saveBook({
+        title: this.state.title,
+        author: this.state.author,
+        synopsis: this.state.synopsis
       })
         .then(res => this.loadBooks())
         .catch(err => console.log(err));
@@ -64,10 +57,9 @@ class Books extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-12">
-            <Jumbotron size='sm-12'>
-              <h1>React Google Book Search</h1>
-              <p>Search for and Save Books of Interest</p>
+          <Col size="md-6">
+            <Jumbotron>
+              <h1>What Books Should I Read?</h1>
             </Jumbotron>
             <form>
               <Input
@@ -75,48 +67,42 @@ class Books extends Component {
                 onChange={this.handleInputChange}
                 name="title"
                 placeholder="Title (required)"
-              /> Search Books
+              />
+              <Input
+                value={this.state.author}
+                onChange={this.handleInputChange}
+                name="author"
+                placeholder="Author (required)"
+              />
+              <TextArea
+                value={this.state.synopsis}
+                onChange={this.handleInputChange}
+                name="synopsis"
+                placeholder="Synopsis (Optional)"
+              />
               <FormBtn
-                disabled={!this.state.title}
+                disabled={!(this.state.author && this.state.title)}
                 onClick={this.handleFormSubmit}
               >
-                Submit
+                Submit Book
               </FormBtn>
             </form>
           </Col>
-          </Row>
-          <Row>
-          <Col size="md-12 sm-12">
-
+          <Col size="md-6 sm-12">
+            <Jumbotron>
+              <h1>Books On My List</h1>
+            </Jumbotron>
             {this.state.books.length ? (
               <List>
                 {this.state.books.map(book => (
-
-                  <ListItem className="media my-4 rounded shadow p-2" key={book.id}>
-                    <img src={book.img ? book.img : ""} className="mr-3" alt="..." />
-                    <div className="media-body">
-                      <h5 className="mt-0 mb-1">{book.title} <span className="font-italic">by {book.author}</span></h5>
-                      {/* <Link to={"/books/" + book._id}>
-                        <strong>
-                          {book.title} by {book.author}
-                        </strong>
-                      </Link> */}
-                      <p className="overflow-auto description">{book.description}</p>
-                      <a className="btn btn-primary" target="_blank" href={"/books/" + book._id}>View</a> {" "}
-                      <SaveBtn key="book.id" book={book} savebook={this.saveBook} />
-                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
-                    </div>
+                  <ListItem key={book._id}>
+                    <Link to={"/books/" + book._id}>
+                      <strong>
+                        {book.title} by {book.author}
+                      </strong>
+                    </Link>
+                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
                   </ListItem>
-
-
-                  // <ListItem key={book._id}>
-                  //   <Link to={"/books/" + book._id}>
-                  //     <strong>
-                  //       {book.title} by {book.author}
-                  //     </strong>
-                  //   </Link>
-                  //   <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  // </ListItem>
                 ))}
               </List>
             ) : (
