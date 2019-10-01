@@ -11,9 +11,13 @@ import { Input, FormBtn } from "../components/Form";
 import SearchForm from "../components/SearchForm";
 import SearchResults from "../components/SearchResults";
 
+import axios from 'axios';
+
+    const API_URL = `https://www.googleapis.com/books/v1/volumes`;
 
 
-const axios = require('axios');
+
+
 class Books extends Component {
   state = {
     books: [],
@@ -22,7 +26,8 @@ class Books extends Component {
     synopsis: "",
     search: "",
     book: "",
-    error: ""
+    error: "",
+    items: []
   };
 
   // componentDidMount() {
@@ -49,15 +54,15 @@ class Books extends Component {
     this.props.saveBook(book)
     console.log(book);
   }
- handleInputChange = event => {
-    this.setState({ search: event.target.value });
+//  handleInputChange = event => {
+//     this.setState({ search: event.target.value });
+//   };
+  handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
   };
-  // handleInputChange = event => {
-  //   const { name, value } = event.target;
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // };
 
   // handleFormSubmit = event => {
   //   event.preventDefault();
@@ -86,17 +91,38 @@ class Books extends Component {
 
   //     .catch(err => console.log(err));
   // };
-  handleFormSubmit = event => {
-    event.preventDefault();
-    API.searchBooks(this.state.search)
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({ results: res.data.message, error: "" });
-      })
-      .catch(err => this.setState({ error: err.message }));
-  };
+  // handleFormSubmit = event => {
+  //   event.preventDefault();
+  //   API.searchBooks(this.state.search)
+  //     .then(res => {
+  //       if (res.data.status === "error") {
+  //         throw new Error(res.data.message);
+  //       }
+  //       this.setState({ results: res.data.message, error: "" });
+  //     })
+  //     .catch(err => this.setState({ error: err.message }));
+  // };
+
+
+    // fetchBooks = async () => {
+    //     // Ajax call to API using Axios
+    //     const result = await axios.get(`${API_URL}?q=${this.state.search}`);
+    //     // Books result
+    //     console.log(result.data);
+    // };
+
+    // Submit handler
+    searchGoogleBooks = (e) => {
+        // Prevent browser refreshing after form submission
+        e.preventDefault();
+        // Call fetch books async function
+        this.fetchBooks();
+    };
+
+fetchBooks = async () => {
+  const result = await axios.get(`${API_URL}?q=${this.state.search}`);
+  this.setState({ books: result.data, error: "" });
+};
   // searchGoogleBooks = event => {
   //   event.preventDefault();
   //   API.searchBooks(this.state.search)
@@ -119,10 +145,11 @@ class Books extends Component {
               <h1>React Google Book Search</h1>
               <p>Search for and Save Books of Interest</p>
             </Jumbotron>
-            {/* <form>
+            <form>
             Search Books
               <Input
                 value={this.state.search}
+                // value={searchTerm}
                 onChange={this.handleInputChange}
                 name="search"
                 placeholder="Title (required)"
@@ -133,22 +160,39 @@ class Books extends Component {
               >
                 Submit
               </FormBtn>
-            </form> */}
-            <SearchForm
+            </form>
+            {/* <SearchForm
               handleFormSubmit={this.handleFormSubmit}
               handleInputChange={this.handleInputChange}
               search={this.state.search}
             />
-            <SearchResults results={this.state.results} />
+            <SearchResults results={this.state.results} /> */}
 
           </Col>
           </Row>
           <Row>
           <Col size="md-12 sm-12">
 
-            {this.state.books ? (
+            {this.state.books.items ? (
 
-              <List></List>
+                <ul>
+                    {
+                      this.state.books.items.map((book, index) => {
+                        return (
+                          <li key={index}>
+                            <div>
+                              <img alt={`${book.volumeInfo.title} book`} src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} />
+                              <div>
+                                <h3>{book.volumeInfo.title}</h3>
+                                <p>{book.volumeInfo.publishedDate}</p>
+                              </div>
+                            </div>
+                            <hr />
+                          </li>
+                        );
+                      })
+                    }
+                  </ul>
               //   {this.state.books.map(book => (
 
               //     <ListItem className="media my-4 rounded shadow p-2" key={book.id}>
