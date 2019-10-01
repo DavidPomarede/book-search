@@ -63,18 +63,47 @@ class Saved extends Component {
               <h1>Books On My List</h1>
             </Jumbotron>
             {this.state.books.length ? (
-              <List>
-                {this.state.books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
+              // <List>
+              //   {this.state.books.map(book => (
+              //     <ListItem key={book._id}>
+              //       <Link to={"/books/" + book._id}>
+              //         <strong>
+              //           {book.title} by {book.author}
+              //         </strong>
+              //       </Link>
+              //       <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+              //     </ListItem>
+              //   ))}
+              // </List>
+
+
+                <ul>
+                    {
+                      this.state.books.map((book, index) => {
+                        return (
+                          <li key={index} className="list-group-item">
+                            <div className="row">
+                                <div className="col-2">
+                              <a href={book.infoLink}><img alt={`${book.title} book`} src={book.image} /></a>
+                                </div>
+                                <div className="col-3">
+                              <a href={book.infoLink}><h3>{book.title}</h3></a>
+                              <p>by: {book.authors}</p>
+                              <p>{book.publishedDate}</p>
+                                </div>
+                                <div className="col">
+                                <p>{book.description}</p>
+                                <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+
+                                </div>
+                            </div>
+                          </li>
+                        );
+                      })
+                    }
+                  </ul>
+
+
             ) : (
               <h3>No Results to Display</h3>
             )}

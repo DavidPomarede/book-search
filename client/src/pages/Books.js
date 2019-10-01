@@ -248,7 +248,7 @@ fetchBooks = async () => {
               //   ))}
               // </List>
             ) : (
-              <h3>No Results to Display</h3>
+              <h3>No Results to Display -- Try (re)Submitting a Query!</h3>
             )}
           </Col>
         </Row>
