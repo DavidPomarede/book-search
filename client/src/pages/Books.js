@@ -27,7 +27,8 @@ class Books extends Component {
     search: "",
     book: "",
     error: "",
-    items: []
+    items: [],
+    saved: []
   };
 
   // componentDidMount() {
@@ -49,11 +50,28 @@ class Books extends Component {
       .catch(err => console.log(err));
   };
 
-  saveBook = id => {
-    const book = { ...this.state }
-    this.props.saveBook(book)
-    console.log(book);
-  }
+  // saveBook = id => {
+  //   const book = { ...this.state }
+  //   this.props.saveBook(book)
+  //   console.log(book);
+  // }
+
+    saveBook = (book) => {
+      console.log(book);
+    const bookData = {
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.smallThumbnail,
+      infoLink: book.volumeInfo.infoLink,
+      publishedDate: book.volumeInfo.publishedDate
+    }
+    console.log(bookData);
+    API.saveBook(bookData)
+      .then(console.log("did I do it?"))
+      .catch(err => console.log(err));
+    }
+
 //  handleInputChange = event => {
 //     this.setState({ search: event.target.value });
 //   };
@@ -179,32 +197,22 @@ fetchBooks = async () => {
                     {
                       this.state.books.items.map((book, index) => {
                         return (
-                          <li key={index} class="list-group-item">
-                            {/* <div>
-                              <div>
-
-                              </div>
-                            </div> */}
-                            <div class="row">
-                                <div class="col-2">
+                          <li key={index} className="list-group-item">
+                            <div className="row">
+                                <div className="col-2">
                               <a href={book.volumeInfo.infoLink}><img alt={`${book.volumeInfo.title} book`} src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} /></a>
-
                                 </div>
-
-                                <div class="col-3">
-                              <h3>{book.volumeInfo.title}</h3>
+                                <div className="col-3">
+                              <a href={book.volumeInfo.infoLink}><h3>{book.volumeInfo.title}</h3></a>
                               <p>by: {book.volumeInfo.authors}</p>
                               <p>{book.volumeInfo.publishedDate}</p>
-
                                 </div>
-                                <div class="col">
+                                <div className="col">
                                 <p>{book.volumeInfo.description}</p>
-                                <SaveBtn key="book.id" book={book} savebook={this.saveBook} />
+                                <SaveBtn key="book.id" book={book} onClick={() => this.saveBook(book)} />
+
                                 </div>
-
                             </div>
-
-
                           </li>
                         );
                       })
